@@ -1152,6 +1152,11 @@ typedef enum {
 	COMM_GET_GNSS,
 
 	COMM_LOG_DATA_F64,
+
+        // Set motor RPM speed and motor max current
+	// This command is usefull for EScooters, see:
+	// https://github.com/vedderb/bldc/issues/628
+	COMM_SET_RPM_CURRENT
 } COMM_PACKET_ID;
 
 // CAN commands

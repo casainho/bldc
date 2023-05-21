@@ -501,6 +501,28 @@ void commands_process_packet(unsigned char *data, unsigned int len,
 		timeout_reset();
 	} break;
 
+	case COMM_SET_RPM_CURRENT: {
+		int32_t ind = 0;
+		float target_speed = (float)buffer_get_int32(data, &ind);
+		float max_current = ((float)buffer_get_int32(data, &ind) / 1000.0);
+
+		// set max current
+		mc_configuration *mcconf = mempools_alloc_mcconf();
+		*mcconf = *mc_interface_get_configuration();
+
+		if (mcconf->l_current_max != max_current) {
+			mcconf->l_current_max = max_current;
+			mc_interface_set_configuration(mcconf);
+		}
+
+		mempools_free_mcconf(mcconf);
+
+		// set target RPM
+		mc_interface_set_pid_speed(target_speed);
+
+		timeout_reset();
+	} break;
+
 	case COMM_SET_POS: {
 		int32_t ind = 0;
 		mc_interface_set_pid_pos((float)buffer_get_int32(data, &ind) / 1000000.0);
