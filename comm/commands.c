@@ -1590,6 +1590,64 @@ void commands_process_packet(unsigned char *data, unsigned int len,
 		}
 	} break;
 
+	case COMM_SET_L_CURRENT_MIN: {
+		// based on implementation in ext_conf_set()
+		mc_configuration *mcconf = (mc_configuration*)mc_interface_get_configuration();
+		int32_t ind = 0;
+
+		mcconf->l_current_min = (float) buffer_get_int32(data, &ind) / 1000.0;
+		commands_apply_mcconf_hw_limits(mcconf);
+
+		timeout_reset();
+	} break;
+
+	case COMM_SET_L_CURRENT_MAX: {
+		// based on implementation in ext_conf_set()
+		mc_configuration *mcconf = (mc_configuration*)mc_interface_get_configuration();
+		int32_t ind = 0;
+
+		mcconf->l_current_max = (float) buffer_get_int32(data, &ind) / 1000.0;
+		commands_apply_mcconf_hw_limits(mcconf);
+
+		timeout_reset();
+	} break;
+
+	case COMM_SET_L_IN_CURRENT_MIN: {
+		// based on implementation in ext_conf_set()
+		mc_configuration *mcconf = (mc_configuration*)mc_interface_get_configuration();
+		int32_t ind = 0;
+
+		mcconf->l_in_current_min = (float) buffer_get_int32(data, &ind) / 1000.0;
+		commands_apply_mcconf_hw_limits(mcconf);
+
+		timeout_reset();
+	} break;
+
+	case COMM_SET_L_IN_CURRENT_MAX: {
+		// based on implementation in ext_conf_set()
+		mc_configuration *mcconf = (mc_configuration*)mc_interface_get_configuration();
+		int32_t ind = 0;
+
+		mcconf->l_in_current_max = (float) buffer_get_int32(data, &ind) / 1000.0;
+		commands_apply_mcconf_hw_limits(mcconf);
+
+		timeout_reset();
+	} break;
+
+	case COMM_SET_L_MAX_SPEED: {
+		// based on implementation in ext_conf_set()
+		mc_configuration *mcconf = (mc_configuration*)mc_interface_get_configuration();
+		int32_t ind = 0;
+
+		const float fact = ((mcconf->si_motor_poles / 2.0) * 60.0 *
+					mcconf->si_gear_ratio) / (mcconf->si_wheel_diameter * M_PI);
+
+		mcconf->l_max_erpm = (float) buffer_get_int32(data, &ind) * fact;
+		commands_apply_mcconf_hw_limits(mcconf);
+
+		timeout_reset();
+	} break;
+
 	// Blocking commands. Only one of them runs at any given time, in their
 	// own thread. If other blocking commands come before the previous one has
 	// finished, they are discarded.
