@@ -1205,6 +1205,13 @@ void comm_can_send_status5(uint8_t id, bool replace) {
 	buffer_append_int16(buffer, 0, &send_index); // Reserved for now
 	comm_can_transmit_eid_replace(id | ((uint32_t)CAN_PACKET_STATUS_5 << 8),
 			buffer, send_index, replace, 0);
+
+	// Send added extra STATUS MESSAGE 
+	send_index = 0;
+	float battery_level = mc_interface_get_battery_level(0);
+	buffer_append_float16(buffer, battery_level, 1e3, &send_index);
+	comm_can_transmit_eid_replace(id | ((uint32_t)CAN_PACKET_STATUS_7 << 8),
+			buffer, send_index, replace, 0);
 }
 
 void comm_can_send_status6(uint8_t id, bool replace) {

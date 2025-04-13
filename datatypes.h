@@ -1104,7 +1104,6 @@ typedef enum {
 	COMM_SET_L_CURRENT_MAX					        = 201,
 	COMM_SET_L_IN_CURRENT_MIN				        = 202,
 	COMM_SET_L_IN_CURRENT_MAX				        = 203,
-	COMM_SET_L_MAX_SPEED				                = 204,
 	
 } COMM_PACKET_ID;
 
@@ -1173,6 +1172,9 @@ typedef enum {
 	CAN_PACKET_GNSS_LAT						= 60,
 	CAN_PACKET_GNSS_LON						= 61,
 	CAN_PACKET_GNSS_ALT_SPEED_HDOP			= 62,
+
+	CAN_PACKET_STATUS_7						= 99,
+
 	CAN_PACKET_MAKE_ENUM_32_BITS = 0xFFFFFFFF,
 } CAN_PACKET_ID;
 
